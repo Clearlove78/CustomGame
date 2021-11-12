@@ -22,8 +22,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ThirdActivity"
-            android:screenOrientation="landscape" />
+            android:name=".ThirdActivity" />
+        <activity
+            android:name=".End" />
         <service android:name=".music"
             android:exported="false"></service>
     </application>
