@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.customgame">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -22,9 +23,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ThirdActivity" />
-        <activity
             android:name=".End" />
+        <activity android:name=".GameActivity"></activity>
+        <activity android:name=".GameView"
+            tools:ignore="Instantiatable"></activity>
         <service android:name=".music"
             android:exported="false"></service>
     </application>
