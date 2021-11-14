@@ -1,30 +1,38 @@
 
 package com.example.customgame;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class GameView extends View {
 
 	private Paint paint;
 	private Paint textPaint;
+	private Paint textPaint2;
 	private CombatAircraft combatAircraft = null;
 	private List<Sprite> sprites = new ArrayList<Sprite>();
 	private List<Sprite> spritesNeedAdded = new ArrayList<Sprite>();
@@ -35,7 +43,6 @@ public class GameView extends View {
 	public static final int STATUS_GAME_OVER = 3;//over
 	public static final int STATUS_GAME_DESTROYED = 4;//destroy
 	public static final int STATUS_GAME_Finish = 5;//finish
-	public static int a = 0;
 	private int status = STATUS_GAME_DESTROYED;//destroy status
 	private long frame = 0;//frame
 	private long score = 0;//score
@@ -55,6 +62,9 @@ public class GameView extends View {
 	private long touchUpTime = -1;
 	private float touchX = -1;
 	private float touchY = -1;
+	private int x = 0;
+	private int y = -2720;
+	private Bitmap back;
 
 
 	public GameView(Context context) {
@@ -82,10 +92,12 @@ public class GameView extends View {
 		//set text
 		textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.FAKE_BOLD_TEXT_FLAG);
 		textPaint.setColor(0xff000000);
-		fontSize = textPaint.getTextSize();
+		textPaint2 = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.FAKE_BOLD_TEXT_FLAG);
+		textPaint2.setColor(Color.rgb(255,255,255));
 		fontSize *= density;
 		fontSize2 *= density;
 		textPaint.setTextSize(fontSize);
+		textPaint2.setTextSize(fontSize);
 		borderSize *= density;
 	}
 
@@ -128,24 +140,54 @@ public class GameView extends View {
 		//get score
 		return score;
 	}
-
 	@Override
 	protected void onDraw(Canvas canvas) {
 		onSingleClick(touchX, touchY);
+		back = BitmapFactory.decodeResource(getResources(),R.drawable.aircraft);
+		logic();
+		canvas.drawBitmap(back,0, x,null);
+		canvas.drawBitmap(back,0, y,null);
 		super.onDraw(canvas);
-		if(score>100000){
-			status = STATUS_GAME_Finish;
-		}
-		if(status == STATUS_GAME_STARTED){
-			drawGameStarted(canvas);
-		}else if(status == STATUS_GAME_PAUSED){
-			drawGamePaused(canvas);
-		}else if(status == STATUS_GAME_OVER){
-			drawGameOver(canvas);
-		} else if(status == STATUS_GAME_Finish){
-			drawGameFinish(canvas);
+		if(End.level == 2) {
+			if (score > 10000) {
+				status = STATUS_GAME_Finish;
+			}
+			if (status == STATUS_GAME_STARTED) {
+				drawGameStarted(canvas);
+			} else if (status == STATUS_GAME_PAUSED) {
+				drawGamePaused(canvas);
+			} else if (status == STATUS_GAME_OVER) {
+				drawGameOver(canvas);
+			} else if (status == STATUS_GAME_Finish) {
+				drawGameFinish(canvas);
+			}
+		}else{
+			if (score > 5000) {
+				status = STATUS_GAME_Finish;
+			}
+			if (status == STATUS_GAME_STARTED) {
+				drawGameStarted(canvas);
+			} else if (status == STATUS_GAME_PAUSED) {
+				drawGamePaused(canvas);
+			} else if (status == STATUS_GAME_OVER) {
+				drawGameOver(canvas);
+			} else if (status == STATUS_GAME_Finish) {
+				drawGameFinish(canvas);
+			}
 		}
 	}
+	public void logic(){ //逻辑方法
+		x+=10;
+		y+=10;
+		if(x>=back.getHeight()){
+			x =  y - back.getHeight(); //移动在第二张上面
+		}
+		if(y>=back.getHeight()){
+			y =  x - back.getHeight();
+
+		}
+	}
+
 
 	private void drawGameStarted(Canvas canvas){
 
@@ -307,20 +349,12 @@ public class GameView extends View {
 		//score
 		float scoreLeft = pauseLeft + pauseBitmap.getWidth() + 20 * density;
 		float scoreTop = fontSize + pauseTop + pauseBitmap.getHeight() / 2 - fontSize / 2;
-		canvas.drawText(score + "", scoreLeft, scoreTop, textPaint);
-
-		if(combatAircraft != null && !combatAircraft.isDestroyed()){
-			int bombCount = combatAircraft.getBombCount();
-			if(bombCount > 0){
-				//bomb
-				Bitmap bombBitmap = bitmaps.get(11);
-				float bombTop = canvas.getHeight() - bombBitmap.getHeight();
-				canvas.drawBitmap(bombBitmap, 0, bombTop, paint);
-				//bomb number
-				float bombCountLeft = bombBitmap.getWidth() + 10 * density;
-				float bombCountTop = fontSize + bombTop + bombBitmap.getHeight() / 2 - fontSize / 2;
-				canvas.drawText("X " + bombCount, bombCountLeft, bombCountTop, textPaint);
-			}
+		canvas.drawText(score + "", scoreLeft, scoreTop, textPaint2);
+		if(End.level==1) {
+			canvas.drawText("Level: 1", 800, scoreTop, textPaint2);
+		}
+		if(End.level==2) {
+			canvas.drawText("Level: 2", 800, scoreTop, textPaint2);
 		}
 	}
 
@@ -329,7 +363,6 @@ public class GameView extends View {
 			float aircraftY = combatAircraft.getY();
 			List<Bullet> aliveBullets = getAliveBullets();
 			for(Bullet bullet : aliveBullets){
-				//如果战斗机跑到了子弹前面，那么就销毁子弹
 				if(aircraftY <= bullet.getY()){
 					bullet.destroy();
 				}
