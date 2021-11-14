@@ -64,7 +64,10 @@ public class GameView extends View {
 	private float touchY = -1;
 	private int x = 0;
 	private int y = -2720;
+	private int x1 = 0;
+	private int y1 = -2100;
 	private Bitmap back;
+	private Bitmap back2;
 
 
 	public GameView(Context context) {
@@ -143,44 +146,67 @@ public class GameView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		onSingleClick(touchX, touchY);
-		back = BitmapFactory.decodeResource(getResources(),R.drawable.aircraft);
-		logic();
+		//background image recursion
+		if(End.level==1) {
+			back = BitmapFactory.decodeResource(getResources(), R.drawable.aircraft);
+			logic();
+		}
+		if(End.level==2) {
+			back = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+			logic();
+		}
+		if(End.level==3) {
+			back = BitmapFactory.decodeResource(getResources(), R.drawable.backimage3);
+			logic();
+		}
+		if(End.level==4) {
+			back = BitmapFactory.decodeResource(getResources(), R.drawable.backimage4);
+			logic();
+		}
 		canvas.drawBitmap(back,0, x,null);
 		canvas.drawBitmap(back,0, y,null);
 		super.onDraw(canvas);
-		if(End.level == 2) {
-			if (score > 10000) {
+		if(End.level == 1) {
+			if (score > 1000) {
 				status = STATUS_GAME_Finish;
 			}
-			if (status == STATUS_GAME_STARTED) {
-				drawGameStarted(canvas);
-			} else if (status == STATUS_GAME_PAUSED) {
-				drawGamePaused(canvas);
-			} else if (status == STATUS_GAME_OVER) {
-				drawGameOver(canvas);
-			} else if (status == STATUS_GAME_Finish) {
-				drawGameFinish(canvas);
+		}
+		if(End.level == 2) {
+			if (score > 2000) {
+				status = STATUS_GAME_Finish;
 			}
-		}else{
+		}
+		if(End.level == 3) {
+			if (score > 3000) {
+				status = STATUS_GAME_Finish;
+			}
+		}
+		if(End.level == 4) {
+			if (score > 4000) {
+				status = STATUS_GAME_Finish;
+			}
+		}
+		if(End.level == 5) {
 			if (score > 5000) {
 				status = STATUS_GAME_Finish;
 			}
-			if (status == STATUS_GAME_STARTED) {
-				drawGameStarted(canvas);
-			} else if (status == STATUS_GAME_PAUSED) {
-				drawGamePaused(canvas);
-			} else if (status == STATUS_GAME_OVER) {
-				drawGameOver(canvas);
-			} else if (status == STATUS_GAME_Finish) {
-				drawGameFinish(canvas);
-			}
+		}
+		if (status == STATUS_GAME_STARTED) {
+			drawGameStarted(canvas);
+		} else if (status == STATUS_GAME_PAUSED) {
+			drawGamePaused(canvas);
+		} else if (status == STATUS_GAME_OVER) {
+			drawGameOver(canvas);
+		} else if (status == STATUS_GAME_Finish) {
+			drawGameFinish(canvas);
 		}
 	}
-	public void logic(){ //逻辑方法
+	//image recursion x y
+	public void logic(){
 		x+=10;
 		y+=10;
 		if(x>=back.getHeight()){
-			x =  y - back.getHeight(); //移动在第二张上面
+			x =  y - back.getHeight();
 		}
 		if(y>=back.getHeight()){
 			y =  x - back.getHeight();
@@ -189,9 +215,10 @@ public class GameView extends View {
 	}
 
 
+
 	private void drawGameStarted(Canvas canvas){
 
-		drawScoreAndBombs(canvas);
+		drawScore(canvas);
 
 		//set aircraft location
  		if(frame == 0){
@@ -218,7 +245,7 @@ public class GameView extends View {
 		}
 		frame++;
 
-		//sprites, bomb, bullet
+		//sprites, bullet
 		Iterator<Sprite> iterator = sprites.iterator();
 		while (iterator.hasNext()){
 			Sprite s = iterator.next();
@@ -243,7 +270,7 @@ public class GameView extends View {
 
 	//pause
 	private void drawGamePaused(Canvas canvas){
-		drawScoreAndBombs(canvas);
+		drawScore(canvas);
 
 		for(Sprite s : sprites){
 			s.onDraw(canvas, paint, this);
@@ -264,7 +291,6 @@ public class GameView extends View {
 	private void drawGameOver(Canvas canvas){
 		//Game Over and score
 		drawScoreDialog(canvas, "Restart");
-
 		if(lastSingleClickTime > 0){
 			postInvalidate();
 		}
@@ -338,10 +364,10 @@ public class GameView extends View {
 		paint.setStyle(originalStyle);
 	}
 
-	//score and bomb
-	private void drawScoreAndBombs(Canvas canvas){
+	//score
+	private void drawScore(Canvas canvas){
 		//pause
-		Bitmap pauseBitmap = status == STATUS_GAME_STARTED ? bitmaps.get(9) : bitmaps.get(10);
+		Bitmap pauseBitmap = status == STATUS_GAME_STARTED ? bitmaps.get(8) : bitmaps.get(9);
 		RectF pauseBitmapDstRecF = getPauseBitmapDstRecF();
 		float pauseLeft = pauseBitmapDstRecF.left;
 		float pauseTop = pauseBitmapDstRecF.top;
@@ -355,6 +381,15 @@ public class GameView extends View {
 		}
 		if(End.level==2) {
 			canvas.drawText("Level: 2", 800, scoreTop, textPaint2);
+		}
+		if(End.level==3) {
+			canvas.drawText("Level: 3", 800, scoreTop, textPaint2);
+		}
+		if(End.level==4) {
+			canvas.drawText("Level: 4", 800, scoreTop, textPaint2);
+		}
+		if(End.level==5) {
+			canvas.drawText("Level: 5", 800, scoreTop, textPaint2);
 		}
 	}
 
@@ -434,13 +469,6 @@ public class GameView extends View {
 			if(touchType == TOUCH_MOVE){
 				if(combatAircraft != null){
 					combatAircraft.centerTo(touchX, touchY);
-				}
-			}else if(touchType == TOUCH_DOUBLE_CLICK){
-				if(status == STATUS_GAME_STARTED){
-					if(combatAircraft != null){
-						//double click use bomb
-						combatAircraft.bomb(this);
-					}
 				}
 			}
 		}else if(status == STATUS_GAME_PAUSED){
@@ -549,7 +577,7 @@ public class GameView extends View {
 	}
 
 	private RectF getPauseBitmapDstRecF(){
-		Bitmap pauseBitmap = status == STATUS_GAME_STARTED ? bitmaps.get(9) : bitmaps.get(10);
+		Bitmap pauseBitmap = status == STATUS_GAME_STARTED ? bitmaps.get(8) : bitmaps.get(9);
 		RectF recF = new RectF();
 		recF.left = 15 * density;
 		recF.top = 15 * density;

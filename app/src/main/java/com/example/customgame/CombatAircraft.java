@@ -8,9 +8,6 @@ import android.graphics.RectF;
 
 import java.util.List;
 
-/**
- * 战斗机类，可以通过交互改变位置
- */
 public class CombatAircraft extends Sprite {
 	private boolean collide = false;
 	private int bombAwardCount = 0;

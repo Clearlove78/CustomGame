@@ -15,7 +15,18 @@ public class GameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
 		gameView = (GameView)findViewById(R.id.gameView);
-		music.play(this, R.raw.hua);
+		if(End.level==1) {
+			music.play(this, R.raw.kinetic);
+		}
+		if(End.level==2) {
+			music.play(this, R.raw.light);
+		}
+		if(End.level==3) {
+			music.play(this, R.raw.stray);
+		}
+		if(End.level==4) {
+			music.play(this, R.raw.ascension);
+		}
 		int[] bitmapIds = {
 				R.drawable.plane,
 				R.drawable.explosion,
@@ -24,11 +35,9 @@ public class GameActivity extends Activity {
 				R.drawable.small,
 				R.drawable.middle,
 				R.drawable.big,
-				R.drawable.bomb_award,
 				R.drawable.bullet_award,
 				R.drawable.pause1,
 				R.drawable.pause2,
-				R.drawable.bomb
 		};
 		gameView.start(bitmapIds);
 	}

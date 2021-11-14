@@ -3,11 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.12314814814814815" />
         <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/activity_game.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/activity_game1.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/end.xml" value="0.5" />
         <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/end1.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/end2.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/end3.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/end4.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/game.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/XIAJUNWEN/Downloads/CustomGame/app/src/main/res/layout/introduction.xml" value="0.33" />
       </map>
     </option>
   </component>

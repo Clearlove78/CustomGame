@@ -27,12 +27,20 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		music.play(this, R.raw.hua);
+		music.play(this, R.raw.urf);
 		Button btn2=(Button) findViewById(R.id.button20);
 		btn2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent intent=new Intent(MainActivity.this,GameActivity.class) ;
+				startActivity(intent);
+			}
+		});
+		Button btn1=(Button) findViewById(R.id.button10);
+		btn1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent=new Intent(MainActivity.this,Intro.class) ;
 				startActivity(intent);
 			}
 		});
@@ -47,54 +55,11 @@ public class MainActivity extends AppCompatActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		music.play(this, R.raw.hua);
-	}
-	public void onVolumeAddKeyclick(View view) {
-
-		OnVolumeAddKey();
-	}
-	public void onVolumeReduceKeyclick(View view) {
-
-		OnVolumeReduceKey();
-
+		music.play(this, R.raw.urf);
 	}
 	public void onHomeKeyclick(View view) {
 
 		OnHomeKey();
-
-	}
-	public void OnVolumeAddKey(){
-
-		try
-		{
-			String keyCommand = "input keyevent " + KeyEvent.KEYCODE_VOLUME_UP;
-			Runtime runtime = Runtime.getRuntime();
-			Process proc = runtime.exec(keyCommand);
-
-			Log.i(TAG, "OnVolumeAddKey: Volume increase");
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-	public void OnVolumeReduceKey(){
-
-		try
-		{
-			String keyCommand = "input keyevent " + KeyEvent.KEYCODE_VOLUME_DOWN;
-			Runtime runtime = Runtime.getRuntime();
-			Process proc = runtime.exec(keyCommand);
-
-			Log.i(TAG, "OnVolumeAddKey: Volume decrease");
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 	public void OnHomeKey(){

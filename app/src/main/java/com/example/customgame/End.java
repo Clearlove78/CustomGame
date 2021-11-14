@@ -18,15 +18,32 @@ public class End extends AppCompatActivity {
 		if(level == 2) {
 			setContentView(R.layout.end1);
 		}
+		if(level == 3) {
+			setContentView(R.layout.end2);
+		}
+		if(level == 4) {
+			setContentView(R.layout.end3);
+		}
 		music.play(this, R.raw.hua);
-		Button btn2=(Button) findViewById(R.id.button);
-		btn2.setOnClickListener(new View.OnClickListener() {
+		Button btn1=(Button) findViewById(R.id.button1);
+		btn1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				level++;
-				Intent intent=new Intent(End.this,GameActivity.class) ;
+				level = 1;
+				Intent intent = new Intent(End.this, MainActivity.class);
 				startActivity(intent);
 			}
 		});
+		if(level<4) {
+			Button btn2 = (Button) findViewById(R.id.button);
+			btn2.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					level++;
+					Intent intent = new Intent(End.this, GameActivity.class);
+					startActivity(intent);
+				}
+			});
+		}
 	}
 }
